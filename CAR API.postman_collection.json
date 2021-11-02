@@ -1,0 +1,415 @@
+{
+	"info": {
+		"_postman_id": "89fbc537-c480-4752-9fd6-5291dcc990f7",
+		"name": "CAR API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CRUD",
+			"item": [
+				{
+					"name": "List of Cars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"//Parsing Response body to JSON",
+									"const response = pm.response.json()",
+									" ",
+									" // function checking response model is equal to string",
+									"let model;",
+									" ",
+									"for (let filter of response) {",
+									"    if (filter.model === \"Model 3\") {",
+									"       //console.log(filter)",
+									"       model = filter;",
+									"    }",
+									"}",
+									"console.log(model)",
+									" ",
+									"pm.test(\"car model is Model 3\", function () {",
+									"    pm.expect(model.model).to.eql(\"Model 3\");",
+									"});",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"//That's the same function like above but it's hard coded, if list of array will change test will not pass it. That help me understand more function above.",
+									"//pm.test(\"car model is Model 3\", function () {",
+									" //   pm.expect(response[1].model).to.be.eql(\"Model 3\");",
+									"//});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{carUrl}}/cars",
+							"host": [
+								"{{carUrl}}"
+							],
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.environment.set(\"carId\", response.id);",
+									"",
+									"",
+									"pm.test(\"Model is F40\", () => {",
+									"    pm.expect(response.model).to.be.eql(\"F40\");",
+									"});",
+									"",
+									"pm.test(\"Manufacturer is Ferrari\", () => {",
+									"    pm.expect(response.manufacturer).to.be.eql(\"Ferrari\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"build\": 1987,\n  \"manufacturer\": \"Ferrari\",\n  \"model\": \"F40\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{carUrl}}/cars",
+							"host": [
+								"{{carUrl}}"
+							],
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Model is Marannelo\", () => {",
+									"    pm.expect(response.model).to.be.eql(\"Marannelo\");",
+									"});",
+									"",
+									"pm.test(\"manufacturer is Ferrari\", () => {",
+									"    pm.expect(response.manufacturer).to.be.eql(\"Ferrari\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"build\": 1987,\n  \"id\": {{carId}},\n  \"manufacturer\": \"Ferrari\",\n  \"model\": \"Marannelo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{carUrl}}/cars",
+							"host": [
+								"{{carUrl}}"
+							],
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{carUrl}}/cars/:carID",
+							"host": [
+								"{{carUrl}}"
+							],
+							"path": [
+								"cars",
+								":carID"
+							],
+							"variable": [
+								{
+									"key": "carID",
+									"value": "{{carId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a single car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", () => {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"const response = pm.response.json()",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{carUrl}}/cars/:carID",
+							"host": [
+								"{{carUrl}}"
+							],
+							"path": [
+								"cars",
+								":carID"
+							],
+							"variable": [
+								{
+									"key": "carID",
+									"value": "{{carId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "List of Cars Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Status code is 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"//Parsing Response body to JSON",
+							"const response = pm.response.json()",
+							" ",
+							" // function checking response model is equal to string",
+							"let res = response.find(item => item.model === \"Model 3\");",
+							" ",
+							"",
+							"console.log(res)",
+							" ",
+							"pm.test(\"car model is Model 3\", function () {",
+							"    pm.expect(res.model).to.eql(\"Model 3\");",
+							"});",
+							"",
+							"",
+							"",
+							"//That's the same function like above but it's hard coded, if list of array will change test will not pass it. That help me understand more function above.",
+							"//pm.test(\"car model is Model 3\", function () {",
+							" //   pm.expect(response[1].model).to.be.eql(\"Model 3\");",
+							"//});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{carUrl}}/cars",
+					"host": [
+						"{{carUrl}}"
+					],
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all repairs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{carUrl}}/cars/:carId/repairs",
+					"host": [
+						"{{carUrl}}"
+					],
+					"path": [
+						"cars",
+						":carId",
+						"repairs"
+					],
+					"variable": [
+						{
+							"key": "carId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Repair",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"description\": \"Replace new tire\",\n  \"repair_date\": \"2021-09-22T08:37:38.124Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{carUrl}}/cars/:carId/repairs",
+					"host": [
+						"{{carUrl}}"
+					],
+					"path": [
+						"cars",
+						":carId",
+						"repairs"
+					],
+					"variable": [
+						{
+							"key": "carId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get repair by repairID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{carUrl}}/cars/:carId/repairs/:repairId",
+					"host": [
+						"{{carUrl}}"
+					],
+					"path": [
+						"cars",
+						":carId",
+						"repairs",
+						":repairId"
+					],
+					"variable": [
+						{
+							"key": "carId",
+							"value": "2"
+						},
+						{
+							"key": "repairId",
+							"value": "18"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "car-fleet-management.herokuapp.com/"
+		}
+	]
+}
+
